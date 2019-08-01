@@ -6,6 +6,7 @@
   const data = []
   const dataPanel = document.getElementById('data-panel')
   const genreList = document.getElementById('genre-list')
+
   const genres = {
     "1": "Action",
     "2": "Adventure",
@@ -27,6 +28,29 @@
     "18": "War",
     "19": "Western"
   }
+
+  const genresBadgeColor = {
+    "1": "danger",
+    "2": "danger",
+    "3": "primary",
+    "4": "warning",
+    "5": "dark",
+    "6": "light",
+    "7": "success",
+    "8": "success",
+    "9": "info",
+    "10": "secondary",
+    "11": "dark",
+    "12": "primary",
+    "13": "warning",
+    "14": "warning",
+    "15": "info",
+    "16": "success",
+    "17": "dark",
+    "18": "light",
+    "19": "primary"
+  }
+
 
 
   axios.get(INDEX_URL).then((response) => {
@@ -51,8 +75,19 @@
 
   })
 
+  // listen to genres badges
+  dataPanel.addEventListener('click', event => {
+    console.log(event.target)
+    if (event.target.matches(".genre-tag")) {
+      let targetGenre = Number(event.target.dataset.genre)
+      let results = []
+      results = searchGenre(data, targetGenre)
+      displayDataList(results)
+    }
+  })
+
+
   // search the match genres in data
-  // i dont know how to filter out with the array
   function searchGenre(data, genre) {
     let genreNumber = Number(genre)
     return data.filter(item => item.genres.indexOf(genreNumber) !== -1)
@@ -76,7 +111,7 @@
       genresList.forEach(function (genre) {
         let genreKeyString = genre.toString()
         htmlContent += `
-          <span class="badge badge-pill badge-dark genre-tag"  data-genre="${genreKeyString}">${genres[genreKeyString]}</span>
+          <a href="#" class="badge badge-pill badge-${genresBadgeColor[genreKeyString]} genre-tag"  data-genre="${genreKeyString}">${genres[genreKeyString]}</a>
           `
       })
       htmlContent += `
